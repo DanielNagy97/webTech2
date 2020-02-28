@@ -1,0 +1,17 @@
+{
+  "name": "webtech2",
+  "version": "1.0.0",
+  "description": "Assignment for the 'Web Technologies 2' course",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "Nagy Dániel Zoltán",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.2",
+    "nodemon": "^2.0.2"
+  }
+}
