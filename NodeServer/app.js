@@ -3,6 +3,9 @@ const app = express();
 const mongoose = require('mongoose');
 const albumsRoute = require('./routes/albums')
 const bodyParser = require('body-parser');
+const cors = require('cors')
+
+app.use(cors());
 
 app.use(bodyParser.json());
 
@@ -23,7 +26,7 @@ mongoose.connect(dbURL,
         console.log("Connected to database: " + dbURL);
 });
 
-var server = app.listen(3000, () =>{
+var server = app.listen(9000, () =>{
     var host = server.address().address;
     var port = server.address().port;
     console.log("App listening at http://%s:%s", host, port);
