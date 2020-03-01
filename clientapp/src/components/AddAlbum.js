@@ -10,14 +10,6 @@ export default class AddAlbum extends Component {
         this.onChangeCountry = this.onChangeCountry.bind(this);
         this.onChangeYear = this.onChangeYear.bind(this);
         this.onChangeGenre = this.onChangeGenre.bind(this);
-
-        this.addStyle = this.addStyle.bind(this)
-        this.handleStyeChange = this.handleStyeChange.bind(this)
-        this.handleStyleRemove = this.handleStyleRemove.bind(this)
-        this.addTrack = this.addTrack.bind(this)
-        this.handleTrackChange = this.handleTrackChange.bind(this)
-        this.handleTrackRemove = this.handleTrackRemove.bind(this)
-
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
@@ -34,9 +26,16 @@ export default class AddAlbum extends Component {
     }
 
     componentDidMount(){
+        axios.get("http://localhost:9000/artists")
+            .then(res => {
+                if (res.data.length > 0){
+                    this.setState({
+                        artists : res.data.map(artist => artist.name),
+                        artist : res.data[0].name
+                    })
+                }})
+        
         this.setState({
-            artists: ["Black Sabbath", "The Doors", "The Beatles"],
-            artist: "Black Sabbath",
             genres: ["Avant-garde",
                     "Blues",
                     "Caribbean and Caribbean-influenced",
@@ -133,6 +132,16 @@ export default class AddAlbum extends Component {
         console.log(album)
         axios.post("http://localhost:9000/albums", album)
             .then(res => console.log(res.data));
+
+        this.setState({
+                title: '',
+                artist: this.state.artists[0],
+                country: '',
+                year: 0,
+                genre: this.state.genres[0],
+                style: [''],
+                tracklist: ['']
+        })
     }
 
     render(){
@@ -150,16 +159,16 @@ export default class AddAlbum extends Component {
                         </input>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group w-50">
                         <label>Artist: </label>
                         <select ref="userInput"
                             required className="form-control"
                             value={this.state.artist}
                             onChange={this.onChangeArtist}>
                                 {
-                                    this.state.artists.map( function(artist){
+                                    this.state.artists.map( function(artist, key){
                                         return(
-                                            <option key={artist}
+                                            <option key={key}
                                                 value={artist}>{artist}</option>
                                         )
                                     })
@@ -176,7 +185,7 @@ export default class AddAlbum extends Component {
                         </input>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group w-50">
                         <label>Year: </label>
                         <input type="number"
                             className="form-control"
@@ -185,7 +194,7 @@ export default class AddAlbum extends Component {
                         </input>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group w-50">
                         <label>Genre: </label>
                         <select ref="userInput"
                             required className="form-control"
@@ -202,7 +211,7 @@ export default class AddAlbum extends Component {
                         </select>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group w-50">
                         <label>Style: </label>
                         {
                             this.state.style.map((style, index)=>{
@@ -223,7 +232,7 @@ export default class AddAlbum extends Component {
                             onClick={(e)=>this.addStyle(e)}>Add Style</button>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group w-75">
                         <label>Tracklist: </label>
                         {
                             this.state.tracklist.map((track, index)=>{

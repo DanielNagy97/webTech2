@@ -1,40 +1,93 @@
 import React, { Component } from 'react';
-import axios from 'axios'
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import ReactTable from 'react-table-6';
+import 'react-table-6/react-table.css';
 
 
 export default class ListAlbums extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      albumTitles: []
+    constructor(props){
+      super(props);
+      this.state = {
+        albums: []
+      }
     }
-  }
     componentDidMount(){
+      this.updateDatas()
+    }
+
+    updateDatas(){
       axios.get("http://localhost:9000/albums")
       .then(res => {
-        if (res.data.length > 0){
           this.setState({
-            albumTitles : res.data.map(album => album.title)
+            albums:res.data
           })
+      })
+    }
+
+    deleteItem(index){
+      axios.delete("http://localhost:9000/albums/"+index)
+      .then(res => {
+        if(res.data.ok === 1){
+          this.updateDatas()
         }
-        console.log(this.state)
-      });
+      })
     }
 
     render(){
-      return (
-        <div className="App">
-          <h1>List of albums</h1>
-          <ul>
-          {
-            this.state.albumTitles.map((title, index)=>{
-              return(
-                  <li key={index}>{title}</li>
-              )
-            })
-          }
-          </ul>
+      const columns = [
+        {
+          Header: "Title",
+          accessor: "title"
+        },
+        {
+          Header: "Artist",
+          accessor: "artist"
+        },
+        {
+          Header: "Country",
+          accessor: "country"
+        },
+        {
+          Header: "Year",
+          accessor: "year"
+        },
+        {
+          Header: "Genre",
+          accessor: "genre"
+        },
+        {
+          Header: "Actions",
+          Cell:props=>{
+            let link = "/albums/"+props.original._id
+            return(
+              <div>
+                <Link to={link} className="btn btn-info">View it</Link>
 
+                <button type="button" className="btn btn-danger" onClick={()=>{
+                  this.deleteItem(props.original._id);
+                }}>Remove</button>
+              </div>
+            )
+          },
+          sortable:false,
+          filterable:false,
+          width:170,
+          maxWidth:170,
+          minWidth:170
+        }
+      ]
+      return (
+        <div className="cointainer">
+          <h2>List of albums</h2>
+          <ReactTable
+            columns={columns}
+            data={this.state.albums}
+            filterable
+            defaultPageSize={10}
+            noDataText={"Loading data..."}
+          >
+          </ReactTable>
         </div>
       );
     }

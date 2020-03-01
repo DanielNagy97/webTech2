@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios'
 
 
-export default class AddArtist extends Component {
+export default class EditArtist extends Component {
   constructor(props){
     super(props);
         this.onChangeName = this.onChangeName.bind(this);
@@ -14,12 +14,20 @@ export default class AddArtist extends Component {
         this.state = {
             name: '',
             country: '',
-            description: ''
+            description: '',
+            id: this.props.match.params.id
         }
     }
 
     componentDidMount(){
-        console.log("Component mounted");
+        axios.get("http://localhost:9000/artists/"+this.state.id)
+            .then(res => {
+                this.setState({
+                    name:res.data.name,
+                    country:res.data.country,
+                    description:res.data.description
+                })
+            })
     }
 
     onChangeName(e){
@@ -48,20 +56,15 @@ export default class AddArtist extends Component {
             description: this.state.description
         }
         console.log(artist)
-        axios.post("http://localhost:9000/artists", artist)
+        axios.patch("http://localhost:9000/artists/"+this.state.id, artist)
             .then(res => console.log(res.data));
-
-        this.setState({
-            name: '',
-            country: '',
-            description: ''
-        })
     }
 
     render(){
+        console.log(this.state.id)
       return (
             <div>
-                <h2>Add new artist</h2>
+                <h2>Edit artist</h2>
                 <form onSubmit={this.onSubmit}>
 
                     <div className="form-group">
@@ -91,7 +94,7 @@ export default class AddArtist extends Component {
                           </textarea>
                     </div>
 
-                    <button type="submit" value="Add a new artist" className="btn btn-primary">Submit</button>
+                    <button type="submit" value="Edit the artist" className="btn btn-primary">Save</button>
                 </form>
             </div>
       );

@@ -57,7 +57,7 @@ router.get('/:albumId', async (req, res) =>{
 //Delete album by given id in params
 router.delete('/:albumId', async (req, res) =>{
     try{
-        const removedAlbum = await Album.remove({_id: req.params.albumId});
+        const removedAlbum = await Album.deleteOne({_id: req.params.albumId});
         res.json(removedAlbum)
     }catch(err){
         res.json({message: err});
@@ -67,9 +67,9 @@ router.delete('/:albumId', async (req, res) =>{
 //Update an album with an id from params
 //All fields gets updated
 //NOTE: If a field is undefined, the value will be null
-router.patch('/:postId', async (req, res) =>{
+router.patch('/:albumId', async (req, res) =>{
     try{
-        const updatedAlbum = await Album.updateOne({_id: req.params.postId},
+        const updatedAlbum = await Album.updateOne({_id: req.params.albumId},
             {$set: {
                 title: req.body.title,
                 artist: req.body.artist,
@@ -85,4 +85,5 @@ router.patch('/:postId', async (req, res) =>{
         res.json({message: err});
     }
 })
+
 module.exports = router;
