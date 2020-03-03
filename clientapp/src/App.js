@@ -5,8 +5,6 @@ import NavBar from "./components/NavBar";
 import ListAlbums from "./components/ListAlbums";
 import ListArtists from "./components/ListArtists";
 import EditAlbum from "./components/EditAlbum";
-import AddAlbum from "./components/AddAlbum"
-import AddArtist from "./components/AddArtist"
 import EditArtist from "./components/EditArtist"
 import ShowAlbum from "./components/ShowAlbum"
 
@@ -18,13 +16,15 @@ class App extends Component {
         <div className="container">
           <NavBar />
           <Route path="/" exact component={ListAlbums} />
+
           <Route path="/albums" exact component={ListAlbums} />
-          <Route path="/artists" exact component={ListArtists} />
+          <Route path="/albums/add" exact component={EditAlbum} />
           <Route path="/albums/edit/:id" exact component={EditAlbum} />
+          <Route path="/album/:id" exact component={ShowAlbum} />
+
+          <Route path="/artists" exact component={ListArtists} />
+          <Route path="/artists/add" exact component={EditArtist} />
           <Route path="/artists/edit/:id" exact component={EditArtist} />
-          <Route path="/albums/:id" exact component={ShowAlbum} />
-          <Route path="/addAlbum" exact component={AddAlbum} />
-          <Route path="/addArtist" exact component={AddArtist} />
         </div>
       </Router>
     );

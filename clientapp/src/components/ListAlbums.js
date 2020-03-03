@@ -59,7 +59,7 @@ export default class ListAlbums extends Component {
         {
           Header: "Actions",
           Cell:props=>{
-            let link = "/albums/"+props.original._id
+            let link = "/album/"+props.original._id
             return(
               <div>
                 <Link to={link} className="btn btn-info">View it</Link>

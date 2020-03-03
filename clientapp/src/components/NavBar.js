@@ -17,10 +17,10 @@ export default class Navbar extends Component {
                         <Link to="/artists" className="nav-link">Artists</Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="/addAlbum" className="nav-link">Add new album</Link>
+                        <Link to="/albums/add" className="nav-link">Add new album</Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="/addArtist" className="nav-link">Add new artist</Link>
+                        <Link to="/artists/add" className="nav-link">Add new artist</Link>
                     </li>
                 </ul>
             </nav>

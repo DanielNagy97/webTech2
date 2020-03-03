@@ -20,7 +20,8 @@ export default class EditArtist extends Component {
     }
 
     componentDidMount(){
-        axios.get("http://localhost:9000/artists/"+this.state.id)
+        if (this.state.id !== undefined){
+            axios.get("http://localhost:9000/artists/"+this.state.id)
             .then(res => {
                 this.setState({
                     name:res.data.name,
@@ -28,6 +29,8 @@ export default class EditArtist extends Component {
                     description:res.data.description
                 })
             })
+        }
+
     }
 
     onChangeName(e){
@@ -56,12 +59,28 @@ export default class EditArtist extends Component {
             description: this.state.description
         }
         console.log(artist)
-        axios.patch("http://localhost:9000/artists/"+this.state.id, artist)
+        if (this.state.id !== undefined){
+            axios.patch("http://localhost:9000/artists/"+this.state.id, artist)
             .then(res => console.log(res.data));
+        }
+        else{
+            axios.post("http://localhost:9000/artists", artist)
+            .then(res => {
+                console.log(res.data)
+                this.setState({
+                    toEdit: true,
+                    id:res.data._id
+                })           
+            })
+
+        }
     }
 
     render(){
         console.log(this.state.id)
+        if (this.state.toEdit === true) {
+            this.props.history.push('/artists/edit/'+this.state.id)
+        }
       return (
             <div>
                 <h2>Edit artist</h2>
@@ -87,7 +106,7 @@ export default class EditArtist extends Component {
 
                     <div className="form-group">
                         <label>Description: </label>
-                        <textarea class="form-control"
+                        <textarea className="form-control"
                           rows="3"
                           value={this.state.description}
                           onChange={this.onChangeDesc}>

@@ -27,46 +27,46 @@ export default class AddAlbum extends Component {
     }
 
     componentDidMount(){
-        axios.get("http://localhost:9000/albums/"+this.state.id)
-        .then(res => {
-            this.setState({
-              title: res.data.title,
-              artist: res.data.artist,
-              country: res.data.country,
-              year: res.data.year,
-              genre: res.data.genre,
-              style: res.data.style,
-              tracklist: res.data.tracklist,
-            })
-        })
-        console.log(this.state)
         axios.get("http://localhost:9000/artists")
+        .then(res => {
+            if (res.data.length > 0){
+                this.setState({
+                    artists : res.data.map(artist => artist.name),
+                    artist : res.data[0].name,
+                    genres: [   "Avant-garde",
+                                "Blues",
+                                "Caribbean and Caribbean-influenced",
+                                "Comedy",
+                                "Country",
+                                "Easy listening",
+                                "Electronic",
+                                "Flamenco",
+                                "Folk",
+                                "Hip hop",
+                                "Jazz",
+                                "Latin",
+                                "Pop",
+                                "R&B",
+                                "Soul",
+                                "Rock"],
+                    genre: "Rock",
+                })
+            }})
+        if (this.state.id !== undefined){
+            axios.get("http://localhost:9000/albums/"+this.state.id)
             .then(res => {
-                if (res.data.length > 0){
-                    this.setState({
-                        artists : res.data.map(artist => artist.name),
-                    })
-                }})
-        
-        this.setState({
-            genres: ["Avant-garde",
-                    "Blues",
-                    "Caribbean and Caribbean-influenced",
-                    "Comedy",
-                    "Country",
-                    "Easy listening",
-                    "Electronic",
-                    "Flamenco",
-                    "Folk",
-                    "Hip hop",
-                    "Jazz",
-                    "Latin",
-                    "Pop",
-                    "R&B",
-                    "Soul",
-                    "Rock"],
-            genre: "Rock"
-        })
+                this.setState({
+                title: res.data.title,
+                artist: res.data.artist,
+                country: res.data.country,
+                year: res.data.year,
+                genre: res.data.genre,
+                style: res.data.style,
+                tracklist: res.data.tracklist,
+                })
+            })
+        }
+
     }
 
     onChangeTitle(e){
@@ -145,9 +145,29 @@ export default class AddAlbum extends Component {
         console.log(album)
         axios.patch("http://localhost:9000/albums/"+this.state.id, album)
             .then(res => console.log(res.data));
+
+        if (this.state.id !== undefined){
+            axios.patch("http://localhost:9000/albums/"+this.state.id, album)
+            .then(res => console.log(res.data));
+        }
+        else{
+            axios.post("http://localhost:9000/albums", album)
+            .then(res => {
+                console.log(res.data)
+                this.setState({
+                    toEdit: true,
+                    id:res.data._id
+                })           
+            })
+    
+        }
     }
 
     render(){
+        console.log(this.state)
+        if (this.state.toEdit === true) {
+            this.props.history.push('/albums/edit/'+this.state.id)
+        }
       return (
             <div>
                 <h2>Edit album</h2>
