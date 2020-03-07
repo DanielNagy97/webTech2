@@ -7,14 +7,18 @@ import ListArtists from "./components/ListArtists";
 import EditAlbum from "./components/EditAlbum";
 import EditArtist from "./components/EditArtist"
 import ShowAlbum from "./components/ShowAlbum"
+import Header from "./components/Header"
 
 
 class App extends Component {
   render(){
     return (
       <Router>
+        
+        <NavBar />
+        <Header />
         <div className="container">
-          <NavBar />
+
           <Route path="/" exact component={ListAlbums} />
 
           <Route path="/albums" exact component={ListAlbums} />
