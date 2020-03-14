@@ -15,7 +15,8 @@ export default class EditArtist extends Component {
             name: '',
             country: '',
             description: '',
-            id: this.props.match.params.id
+            id: this.props.match.params.id,
+            formClass : ""
         }
     }
 
@@ -68,31 +69,51 @@ export default class EditArtist extends Component {
             .then(res => {
                 console.log(res.data)
                 this.setState({
-                    toEdit: true,
                     id:res.data._id
-                })           
+                });
+                this.props.history.push('/artists/edit/'+this.state.id);          
             })
 
         }
     }
 
+    validate(e){
+        this.setState({formClass: "was-validated"});
+        const artist = {
+            name: this.state.name,
+            country: this.state.country,
+            description: this.state.description
+        }
+
+        let emptyInputs=[];
+        Object.keys(artist).map((key, i) => {
+            if(artist[key] === ""){
+                emptyInputs.push(key);
+            }
+            return null
+        })
+
+        if(emptyInputs.length > 0){
+            console.log(emptyInputs)
+        }
+    }
+
     render(){
         console.log(this.state.id)
-        if (this.state.toEdit === true) {
-            this.props.history.push('/artists/edit/'+this.state.id)
-        }
       return (
             <div>
                 <h2>Edit artist</h2>
-                <form onSubmit={this.onSubmit}>
+                <form onSubmit={this.onSubmit} className={this.state.formClass}>
 
                     <div className="form-group">
                         <label>Name: </label>
                         <input type="text"
                             className="form-control"
                             value={this.state.name}
-                            onChange={this.onChangeName}>
+                            onChange={this.onChangeName} required>
                         </input>
+                        <div className="valid-feedback">Valid.</div>
+                        <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
 
                     <div className="form-group">
@@ -100,8 +121,10 @@ export default class EditArtist extends Component {
                         <input type="text"
                             className="form-control"
                             value={this.state.country}
-                            onChange={this.onChangeCountry}>
+                            onChange={this.onChangeCountry} required>
                         </input>
+                        <div className="valid-feedback">Valid.</div>
+                        <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
 
                     <div className="form-group">
@@ -109,11 +132,18 @@ export default class EditArtist extends Component {
                         <textarea className="form-control"
                           rows="3"
                           value={this.state.description}
-                          onChange={this.onChangeDesc}>
+                          onChange={this.onChangeDesc} required>
                           </textarea>
+                        <div className="valid-feedback">Valid.</div>
+                        <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
 
-                    <button type="submit" value="Edit the artist" className="btn btn-primary">Save</button>
+                    <button type="submit"
+                            value="Edit the artist"
+                            className="btn btn-primary"
+                            onClick={()=>{this.validate()}}>
+                                Save
+                        </button>
                 </form>
             </div>
       );

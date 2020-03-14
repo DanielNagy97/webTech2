@@ -8,17 +8,16 @@ import EditAlbum from "./components/EditAlbum";
 import EditArtist from "./components/EditArtist"
 import ShowAlbum from "./components/ShowAlbum"
 import Header from "./components/Header"
+import Footer from "./components/Footer"
 
 
 class App extends Component {
   render(){
     return (
       <Router>
-        
         <NavBar />
         <Header />
         <div className="container">
-
           <Route path="/" exact component={ListAlbums} />
 
           <Route path="/albums" exact component={ListAlbums} />
@@ -30,6 +29,7 @@ class App extends Component {
           <Route path="/artists/add" exact component={EditArtist} />
           <Route path="/artists/edit/:id" exact component={EditArtist} />
         </div>
+        <Footer />
       </Router>
     );
   }

@@ -22,7 +22,8 @@ export default class AddAlbum extends Component {
             tracklist: [''],
             artists: [],
             genres: [],
-            id: this.props.match.params.id
+            id: this.props.match.params.id,
+            formClass : ""
         }
     }
 
@@ -155,9 +156,9 @@ export default class AddAlbum extends Component {
             .then(res => {
                 console.log(res.data)
                 this.setState({
-                    toEdit: true,
                     id:res.data._id
-                })           
+                })
+                this.props.history.push('/albums/edit/'+this.state.id)
             })
     
         }
@@ -165,21 +166,20 @@ export default class AddAlbum extends Component {
 
     render(){
         console.log(this.state)
-        if (this.state.toEdit === true) {
-            this.props.history.push('/albums/edit/'+this.state.id)
-        }
       return (
             <div>
                 <h2>Edit album</h2>
-                <form onSubmit={this.onSubmit}>
+                <form onSubmit={this.onSubmit} className={this.state.formClass}>
 
                     <div className="form-group">
                         <label>Title: </label>
                         <input type="text"
                             className="form-control"
                             value={this.state.title}
-                            onChange={this.onChangeTitle}>
+                            onChange={this.onChangeTitle} required>
                         </input>
+                        <div className="valid-feedback">Valid.</div>
+                        <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
 
                     <div className="form-group w-50">
@@ -197,6 +197,8 @@ export default class AddAlbum extends Component {
                                     })
                                 }
                         </select>
+                        <div className="valid-feedback">Valid.</div>
+                        <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
 
                     <div className="form-group">
@@ -204,8 +206,10 @@ export default class AddAlbum extends Component {
                         <input type="text"
                             className="form-control"
                             value={this.state.country}
-                            onChange={this.onChangeCountry}>
+                            onChange={this.onChangeCountry} required>
                         </input>
+                        <div className="valid-feedback">Valid.</div>
+                        <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
 
                     <div className="form-group w-50">
@@ -213,16 +217,18 @@ export default class AddAlbum extends Component {
                         <input type="number"
                             className="form-control"
                             value={this.state.year}
-                            onChange={this.onChangeYear}>
+                            onChange={this.onChangeYear} required>
                         </input>
+                        <div className="valid-feedback">Valid.</div>
+                        <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
 
                     <div className="form-group w-50">
                         <label>Genre: </label>
                         <select ref="userInput"
-                            required className="form-control"
+                            className="form-control"
                             value={this.state.genre}
-                            onChange={this.onChangeGenre}>
+                            onChange={this.onChangeGenre} required>
                                 {
                                     this.state.genres.map( function(genre){
                                         return(
@@ -232,6 +238,8 @@ export default class AddAlbum extends Component {
                                     })
                                 }
                         </select>
+                        <div className="valid-feedback">Valid.</div>
+                        <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
 
                     <div className="form-group w-50">
@@ -240,13 +248,18 @@ export default class AddAlbum extends Component {
                             this.state.style.map((style, index)=>{
                                 return(
                                     <div key={index}>
+                                        <div className="input-group">
                                         <input className="form-control"
                                             value={style}
-                                            onChange={(e)=>this.handleStyeChange(e, index)}></input>
-                                        <button type="button"
-                                            className="btn btn-info"
-                                            onClick={(e)=>this.handleStyleRemove(e, index)}>Remove</button>
+                                            onChange={(e)=>this.handleStyeChange(e, index)} required></input>
+                                            <span style={{width: 10}}></span>
+                                            <button type="button"
+                                                className="btn btn-info"
+                                                onClick={(e)=>this.handleStyleRemove(e, index)}>Remove</button>
+                                        </div>
+                                        <br/>
                                     </div>
+                                    
                                 )
                             })
                         }
@@ -261,12 +274,17 @@ export default class AddAlbum extends Component {
                             this.state.tracklist.map((track, index)=>{
                                 return(
                                     <div key={index}>
+                                    <div className="input-group">
+                                        <span>{index+1}. </span>
                                         <input className="form-control"
                                             value={track}
-                                            onChange={(e)=>this.handleTrackChange(e, index)}></input>
+                                            onChange={(e)=>this.handleTrackChange(e, index)} required></input>
+                                        <span style={{width: 10}}></span>
                                         <button type="button"
                                             className="btn btn-info"
                                             onClick={(e)=>this.handleTrackRemove(e, index)}>Remove</button>
+                                    </div>
+                                    <br/>
                                     </div>
                                 )
                             })
@@ -276,7 +294,12 @@ export default class AddAlbum extends Component {
                             onClick={(e)=>this.addTrack(e)}>Add Track</button>
                     </div>
 
-                    <button type="submit" value="Add a new album" className="btn btn-primary">Save</button>
+                    <button type="submit"
+                            value="Add a new album"
+                            className="btn btn-primary"
+                            onClick={()=>{this.setState({formClass: "was-validated"})}}>
+                                Save
+                        </button>
                 </form>
 
             </div>
