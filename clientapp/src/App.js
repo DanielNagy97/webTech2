@@ -9,6 +9,8 @@ import EditArtist from "./components/EditArtist"
 import ShowAlbum from "./components/ShowAlbum"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
+import LoginForm from "./components/LoginForm"
+import RegisterForm from "./components/RegisterForm"
 
 
 class App extends Component {
@@ -28,6 +30,9 @@ class App extends Component {
           <Route path="/artists" exact component={ListArtists} />
           <Route path="/artists/add" exact component={EditArtist} />
           <Route path="/artists/edit/:id" exact component={EditArtist} />
+
+          <Route path="/login" exact component={LoginForm} />
+          <Route path="/register" exact component={RegisterForm} />
         </div>
         <Footer />
       </Router>
