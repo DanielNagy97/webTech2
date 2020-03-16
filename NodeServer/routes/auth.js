@@ -27,7 +27,12 @@ router.post('/', async (req, res) => {
     }
 
     const token = jwt.sign({ _id: user._id }, config.get('PrivateKey'), {expiresIn: "3 hours"});
-    res.send(token);
+    res.send({
+        userID: user._id,
+        token: token
+    });
+    
+
 });
 
 function validate(req) {

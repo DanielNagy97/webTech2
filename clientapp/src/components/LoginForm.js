@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import cookie from 'js-cookie'
+import cookie from 'js-cookie';
 
 
 export default class LoginForm extends Component {
@@ -14,17 +16,22 @@ export default class LoginForm extends Component {
         this.state = {
             email: '',
             password: '',
-            formClass : ""
+            formClass : "",
+            token: false
         }
     }
 
     componentDidMount(){
-        const tokenCookie = cookie.get('token');
-        console.log(tokenCookie)
+        const token = cookie.get('token');
+        //this.setState({
+        //    token: token
+        //})
+        
         //If the login is successfull the "Only logged in people can see me" will appear in console
-        if(tokenCookie){
+        if(token){
+            console.log(token)
             axios.get("http://localhost:9000/secret", {
-            headers: { Authorization: "Bearer " + tokenCookie }
+            headers: { Authorization: "Bearer " + token }
             }).then(res => {
                 console.log(res.data);
             })
@@ -49,11 +56,16 @@ export default class LoginForm extends Component {
             email: this.state.email,
             password: this.state.password
         }
-        console.log(user)
+        //console.log(user)
         axios.post("http://localhost:9000/auth", user)
             .then(res => {
-                console.log(res.data);
-                cookie.set('token', res.data)
+                console.log(res.data.token);
+                cookie.set('usr_id', res.data._id);
+                cookie.set('token', res.data.token);
+                this.setState({
+                    token: res.data.token
+                })
+                window.location.reload();
             })
 
     }
@@ -78,12 +90,12 @@ export default class LoginForm extends Component {
         }
     }
 
-    logout(e){
-        cookie.remove('token');
-    }
-
     render(){
+        if(this.state.token){
+            return <Redirect to="/" />
+          }
       return (
+
             <div>
                 <h2>Login</h2>
                 <form onSubmit={this.onSubmit} className={this.state.formClass}>
@@ -115,13 +127,9 @@ export default class LoginForm extends Component {
                             className="btn btn-primary"
                             onClick={()=>{this.validate()}}>
                                 Login
-                        </button>
+                    </button>
+                    <Link to={"/register"} className="btn btn-info">Register</Link>
                 </form>
-                <button
-                            className="btn btn-primary"
-                            onClick={()=>{this.logout()}}>
-                                Logout
-                </button>
             </div>
       );
     }

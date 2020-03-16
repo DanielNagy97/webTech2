@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -15,7 +16,8 @@ export default class RegisterForm extends Component {
             name: '',
             email: '',
             password: '',
-            formClass : ""
+            formClass : "",
+            isSuccess: false
         }
     }
 
@@ -48,6 +50,9 @@ export default class RegisterForm extends Component {
         axios.post("http://localhost:9000/users", user)
             .then(res => {
                 console.log(res.data);
+                this.setState({
+                    isSuccess : true
+                })
             })
 
     }
@@ -74,7 +79,10 @@ export default class RegisterForm extends Component {
     }
 
     render(){
-      return (
+        if(this.state.isSuccess){
+            return <Redirect to="/" />
+        }
+        return (
             <div>
                 <h2>Register</h2>
                 <form onSubmit={this.onSubmit} className={this.state.formClass}>
@@ -116,7 +124,7 @@ export default class RegisterForm extends Component {
                             value="Edit the artist"
                             className="btn btn-primary"
                             onClick={()=>{this.validate()}}>
-                                Login
+                                Register
                         </button>
                 </form>
             </div>
