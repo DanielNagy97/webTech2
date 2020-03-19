@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import Alert from 'react-bootstrap/Alert'
 import axios from 'axios'
 import { useState } from 'react';
+import cookie from 'js-cookie';
 
+import {hostname} from '../../App';
 
 export default class EditArtist extends Component {
   constructor(props){
@@ -24,7 +26,7 @@ export default class EditArtist extends Component {
 
     componentDidMount(){
         if (this.state.id !== undefined){
-            axios.get("http://localhost:9000/artists/"+this.state.id)
+            axios.get("http://"+hostname+":9000/artists/"+this.state.id)
             .then(res => {
                 this.setState({
                     name:res.data.name,
@@ -56,18 +58,19 @@ export default class EditArtist extends Component {
 
     onSubmit(e){
         e.preventDefault();
-        const artist = {
+        let artist = {
             name: this.state.name,
             country: this.state.country,
-            description: this.state.description
+            description: this.state.description,
+            postedBy: cookie.get("usr_id")
         }
         console.log(artist)
         if (this.state.id !== undefined){
-            axios.patch("http://localhost:9000/artists/"+this.state.id, artist)
+            axios.patch("http://"+hostname+":9000/artists/"+this.state.id, artist)
             .then(res => console.log(res.data));
         }
         else{
-            axios.post("http://localhost:9000/artists", artist)
+            axios.post("http://"+hostname+":9000/artists", artist)
             .then(res => {
                 console.log(res.data)
                 this.setState({

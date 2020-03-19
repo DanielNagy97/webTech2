@@ -1,41 +1,32 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
-import cookie from 'js-cookie';
+
+import {hostname} from '../../App'
 
 
-export default class LoginForm extends Component {
+export default class RegisterForm extends Component {
   constructor(props){
     super(props);
+        this.onChangeName = this.onChangeName.bind(this);
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
 
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
+            name: '',
             email: '',
             password: '',
             formClass : "",
-            token: false
+            isSuccess: false
         }
     }
 
-    componentDidMount(){
-        const token = cookie.get('token');
-        //this.setState({
-        //    token: token
-        //})
-        
-        //If the login is successfull the "Only logged in people can see me" will appear in console
-        if(token){
-            console.log(token)
-            axios.get("http://localhost:9000/secret", {
-            headers: { Authorization: "Bearer " + token }
-            }).then(res => {
-                console.log(res.data);
-            })
-        }
+    onChangeName(e){
+        this.setState({
+            name: e.target.value
+        });
     }
 
     onChangeEmail(e){
@@ -53,26 +44,24 @@ export default class LoginForm extends Component {
     onSubmit(e){
         e.preventDefault();
         const user = {
+            name: this.state.name,
             email: this.state.email,
             password: this.state.password
         }
-        //console.log(user)
-        axios.post("http://localhost:9000/auth", user)
+        console.log(user)
+        axios.post("http://"+hostname+":9000/users", user)
             .then(res => {
-                console.log(res.data.token);
-                cookie.set('usr_id', res.data._id);
-                cookie.set('token', res.data.token);
+                console.log(res.data);
                 this.setState({
-                    token: res.data.token
+                    isSuccess : true
                 })
-                window.location.reload();
             })
-
     }
 
     validate(e){
         this.setState({formClass: "was-validated"});
         const user = {
+            name: this.state.name,
             email: this.state.email,
             password: this.state.password
         }
@@ -91,14 +80,24 @@ export default class LoginForm extends Component {
     }
 
     render(){
-        if(this.state.token){
+        if(this.state.isSuccess){
             return <Redirect to="/" />
-          }
-      return (
-
+        }
+        return (
             <div>
-                <h2>Login</h2>
+                <h2>Register</h2>
                 <form onSubmit={this.onSubmit} className={this.state.formClass}>
+
+                    <div className="form-group">
+                        <label>Name: </label>
+                        <input type="text" placeholder="Name"
+                            className="form-control"
+                            value={this.state.name}
+                            onChange={this.onChangeName} required>
+                        </input>
+                        <div className="valid-feedback">Valid.</div>
+                        <div className="invalid-feedback">Please fill out this field.</div>
+                    </div>
 
                     <div className="form-group">
                         <label>Email: </label>
@@ -126,9 +125,8 @@ export default class LoginForm extends Component {
                             value="Edit the artist"
                             className="btn btn-primary"
                             onClick={()=>{this.validate()}}>
-                                Login
-                    </button>
-                    <Link to={"/register"} className="btn btn-info">Register</Link>
+                                Register
+                        </button>
                 </form>
             </div>
       );

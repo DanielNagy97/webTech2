@@ -12,6 +12,10 @@ const ArtistSchema = mongoose.Schema({
     description: {
         type: String,
         required: true
+    },
+    postedBy: {
+        type: String,
+        required: true
     }
 });
 

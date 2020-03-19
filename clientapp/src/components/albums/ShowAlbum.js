@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+import {hostname} from '../../App';
 
 export default class ShowAlbum extends Component {
   constructor(props){
@@ -16,7 +17,7 @@ export default class ShowAlbum extends Component {
   }
 
   updateDatas(){
-    axios.get("http://localhost:9000/albums/"+this.state.id)
+    axios.get("http://"+hostname+":9000/albums/"+this.state.id)
     .then(res => {
         this.setState({
           album:res.data

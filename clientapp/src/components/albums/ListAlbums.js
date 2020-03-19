@@ -4,6 +4,8 @@ import axios from 'axios';
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css';
 
+import {hostname} from '../../App'
+
 
 export default class ListAlbums extends Component {
     constructor(props){
@@ -17,7 +19,7 @@ export default class ListAlbums extends Component {
     }
 
     updateDatas(){
-      axios.get("http://localhost:9000/albums")
+      axios.get("http://"+hostname+":9000/albums")
       .then(res => {
           this.setState({
             albums:res.data
@@ -26,7 +28,7 @@ export default class ListAlbums extends Component {
     }
 
     deleteItem(index){
-      axios.delete("http://localhost:9000/albums/"+index)
+      axios.delete("http://"+hostname+":9000/albums/"+index)
       .then(res => {
         if(res.data.ok === 1){
           this.updateDatas()

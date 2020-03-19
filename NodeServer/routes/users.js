@@ -6,6 +6,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 
+const expressjwt = require("express-jwt");
+
+const jwtCheck = expressjwt({    
+    secret: config.get('PrivateKey')
+});
+
 router.get('/', async (req, res) => {
     try{
         const users = await User.find();
@@ -14,7 +20,50 @@ router.get('/', async (req, res) => {
         res.json({message: err})
     }
 });
- 
+
+//Get user by given id in params
+router.get('/:userId', jwtCheck, async (req, res) =>{
+    try{
+        const user = await User.findById(req.params.userId);
+        res.json({
+            name:user.name,
+            email:user.email
+        });
+    }catch(err){
+        res.json({message: err});
+    }
+});
+
+//Delete user by given id in params
+router.delete('/:userId', jwtCheck, async (req, res) =>{
+    try{
+        const removedUser = await User.deleteOne({_id: req.params.userId});
+        res.json(removedUser)
+    }catch(err){
+        res.json({message: err});
+    }
+})
+
+//Modify password
+router.patch('/:userId', jwtCheck, async (req, res) =>{
+    try{
+        const salt = await bcrypt.genSalt(10);
+        let saltedPassword = await bcrypt.hash(req.body.password, salt);
+
+        const updatedUser = await User.updateOne({_id: req.params.userId},
+            {$set: {
+                name: req.body.name,
+                email: req.body.email,
+                password: saltedPassword
+            }
+        });
+        res.json(updatedUser)
+    }catch(err){
+        res.json({message: err});
+    }
+})
+
+//Post new user
 router.post('/', async (req, res) => {
     // Validate The Request
     const { error } = validate(req.body);

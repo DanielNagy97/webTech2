@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import cookie from 'js-cookie'
-import Logout from "./Logout.js"
+import Logout from "./login/Logout.js"
 
 export default class Navbar extends Component {
 
@@ -29,17 +29,22 @@ export default class Navbar extends Component {
                         <Link to="/artists/add" className="nav-link">Add new artist</Link>
                     </li>
                     <li className="nav-item">
+                        <Link to="/profile" className="nav-link">Profile</Link>
+                    </li>
+                    <li className="nav-item">
                         <button type="button" className="btn btn-info" onClick={()=>Logout()}>Logout</button>
                     </li>
                     
                 </ul>
 
+                {/*
                 <div className="ml-auto">
                     <form className="form-inline" action="/#">
                         <input className="form-control mr-sm-2" type="text" placeholder="Search"></input>
                         <button className="btn btn-success" type="submit">Search</button>
                     </form>
                 </div>
+                */}
             </nav>
       );
     }

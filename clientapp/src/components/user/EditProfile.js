@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+//import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import cookie from 'js-cookie';
+
+import {hostname} from '../../App'
 
 
-export default class RegisterForm extends Component {
+export default class EditProfile extends Component {
   constructor(props){
     super(props);
         this.onChangeName = this.onChangeName.bind(this);
@@ -17,8 +20,21 @@ export default class RegisterForm extends Component {
             email: '',
             password: '',
             formClass : "",
-            isSuccess: false
+            isSuccess: false,
+            token: cookie.get('token'),
+            usr_id: cookie.get('usr_id')
         }
+    }
+
+    componentDidMount(){
+        axios.get("http://"+hostname+":9000/users/"+this.state.usr_id, {
+        headers: { Authorization: "Bearer " + this.state.token }
+        }).then(res => {
+            this.setState({
+                name:res.data.name,
+                email:res.data.email
+            });
+        })
     }
 
     onChangeName(e){
@@ -47,14 +63,15 @@ export default class RegisterForm extends Component {
             password: this.state.password
         }
         console.log(user)
-        axios.post("http://localhost:9000/users", user)
+        axios.patch("http://"+hostname+":9000/users/"+this.state.usr_id, user, {
+            headers: { Authorization: "Bearer " + this.state.token }
+            })
             .then(res => {
                 console.log(res.data);
                 this.setState({
                     isSuccess : true
                 })
             })
-
     }
 
     validate(e){
@@ -79,12 +96,9 @@ export default class RegisterForm extends Component {
     }
 
     render(){
-        if(this.state.isSuccess){
-            return <Redirect to="/" />
-        }
         return (
             <div>
-                <h2>Register</h2>
+                <h2>Edit Profile</h2>
                 <form onSubmit={this.onSubmit} className={this.state.formClass}>
 
                     <div className="form-group">
@@ -124,7 +138,7 @@ export default class RegisterForm extends Component {
                             value="Edit the artist"
                             className="btn btn-primary"
                             onClick={()=>{this.validate()}}>
-                                Register
+                                Save Profile
                         </button>
                 </form>
             </div>

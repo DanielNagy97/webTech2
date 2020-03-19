@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import axios from 'axios'
+import axios from 'axios';
+
+import {hostname} from '../../App';
 
 
 export default class AddAlbum extends Component {
@@ -28,7 +30,7 @@ export default class AddAlbum extends Component {
     }
 
     componentDidMount(){
-        axios.get("http://localhost:9000/artists")
+        axios.get("http://"+hostname+":9000/artists")
         .then(res => {
             if (res.data.length > 0){
                 this.setState({
@@ -54,7 +56,7 @@ export default class AddAlbum extends Component {
                 })
             }})
         if (this.state.id !== undefined){
-            axios.get("http://localhost:9000/albums/"+this.state.id)
+            axios.get("http://"+hostname+":9000/albums/"+this.state.id)
             .then(res => {
                 this.setState({
                 title: res.data.title,
@@ -144,15 +146,15 @@ export default class AddAlbum extends Component {
             tracklist: this.state.tracklist
         }
         console.log(album)
-        axios.patch("http://localhost:9000/albums/"+this.state.id, album)
+        axios.patch("http://"+hostname+":9000/albums/"+this.state.id, album)
             .then(res => console.log(res.data));
 
         if (this.state.id !== undefined){
-            axios.patch("http://localhost:9000/albums/"+this.state.id, album)
+            axios.patch("http://"+hostname+":9000/albums/"+this.state.id, album)
             .then(res => console.log(res.data));
         }
         else{
-            axios.post("http://localhost:9000/albums", album)
+            axios.post("http://"+hostname+":9000/albums", album)
             .then(res => {
                 console.log(res.data)
                 this.setState({
@@ -182,7 +184,7 @@ export default class AddAlbum extends Component {
                         <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
 
-                    <div className="form-group w-50">
+                    <div className="form-group w-75">
                         <label>Artist: </label>
                         <select ref="userInput"
                             required className="form-control"
@@ -223,7 +225,7 @@ export default class AddAlbum extends Component {
                         <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
 
-                    <div className="form-group w-50">
+                    <div className="form-group w-75">
                         <label>Genre: </label>
                         <select ref="userInput"
                             className="form-control"
@@ -242,7 +244,7 @@ export default class AddAlbum extends Component {
                         <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
 
-                    <div className="form-group w-50">
+                    <div className="form-group">
                         <label>Style: </label>
                         {
                             this.state.style.map((style, index)=>{
@@ -268,7 +270,7 @@ export default class AddAlbum extends Component {
                             onClick={(e)=>this.addStyle(e)}>Add Style</button>
                     </div>
 
-                    <div className="form-group w-75">
+                    <div className="form-group">
                         <label>Tracklist: </label>
                         {
                             this.state.tracklist.map((track, index)=>{

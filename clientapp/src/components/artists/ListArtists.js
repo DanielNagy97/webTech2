@@ -3,13 +3,16 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css';
+import cookie from 'js-cookie';
 
+import {hostname} from '../../App';
 
 export default class ListArtists extends Component {
     constructor(props){
       super(props);
       this.state = {
-        artists: []
+        artists: [],
+        token: cookie.get('token')
       }
     }
     componentDidMount(){
@@ -17,7 +20,7 @@ export default class ListArtists extends Component {
     }
 
     updateDatas(){
-      axios.get("http://localhost:9000/artists")
+      axios.get("http://"+hostname+":9000/artists")
       .then(res => {
           this.setState({
             artists:res.data
@@ -26,7 +29,7 @@ export default class ListArtists extends Component {
     }
 
     deleteItem(index){
-      axios.delete("http://localhost:9000/artists/"+index)
+      axios.delete("http://"+hostname+":9000/artists/"+index)
       .then(res => {
         if(res.data.ok === 1){
           this.updateDatas()

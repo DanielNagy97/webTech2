@@ -3,16 +3,19 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import cookie from 'js-cookie'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from "./components/NavBar";
-import ListAlbums from "./components/ListAlbums";
-import ListArtists from "./components/ListArtists";
-import EditAlbum from "./components/EditAlbum";
-import EditArtist from "./components/EditArtist"
-import ShowAlbum from "./components/ShowAlbum"
+import ListAlbums from "./components/albums/ListAlbums";
+import ListArtists from "./components/artists/ListArtists";
+import EditAlbum from "./components/albums/EditAlbum";
+import EditArtist from "./components/artists/EditArtist"
+import ShowAlbum from "./components/albums/ShowAlbum"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
-import LoginForm from "./components/LoginForm"
-import RegisterForm from "./components/RegisterForm"
+import LoginForm from "./components/login/LoginForm"
+import RegisterForm from "./components/login/RegisterForm"
+import UsrProfile from "./components/user/UsrProfile"
+import EditProfile from "./components/user/EditProfile"
 
+export const hostname = window.location.hostname;
 
 class App extends Component {
   render(){
@@ -45,6 +48,9 @@ class App extends Component {
             <Route path="/artists" exact component={ListArtists} />
             <Route path="/artists/add" exact component={EditArtist} />
             <Route path="/artists/edit/:id" exact component={EditArtist} />
+
+            <Route path="/profile" exact component={UsrProfile} />
+            <Route path="/profile/edit" exact component={EditProfile} />
           </div>
           <Footer />
         </Router>

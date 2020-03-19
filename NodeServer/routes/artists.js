@@ -8,7 +8,8 @@ router.post('/', async (req, res) => {
     const artist = new Artist({
         name: req.body.name,
         country: req.body.country,
-        description: req.body.description
+        description: req.body.description,
+        postedBy: req.body.postedBy
     });
     try{
     const saveArtist = await artist.save();
