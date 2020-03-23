@@ -33,7 +33,7 @@ export default class ShowAlbum extends Component {
         <div>
           <Link to={link} className="btn btn-info">Edit</Link>
           <h1>{this.state.album.title}</h1>
-          <h2>{this.state.album.artist}</h2>
+          <h2>{this.state.album.artist.name}</h2>
           <br/>
           <p>Genre: {this.state.album.genre}</p>
           <p>Style:</p>
@@ -45,7 +45,7 @@ export default class ShowAlbum extends Component {
             }
           </ul>
           <p>Year: {this.state.album.year}</p>
-          <p>Country: {this.state.album.country}</p>
+          <p>Country: {this.state.album.artist.country}</p>
           <p>Tracklist:</p>
           <ul>
           {

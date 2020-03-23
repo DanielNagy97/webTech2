@@ -44,11 +44,11 @@ export default class ListAlbums extends Component {
         },
         {
           Header: "Artist",
-          accessor: "artist"
+          accessor: "artist.name"
         },
         {
           Header: "Country",
-          accessor: "country"
+          accessor: "artist.country"
         },
         {
           Header: "Year",
@@ -79,9 +79,11 @@ export default class ListAlbums extends Component {
           minWidth:170
         }
       ]
+
       return (
         <div className="cointainer">
           <h2>List of albums</h2>
+
           <ReactTable
             columns={columns}
             data={this.state.albums}
@@ -90,6 +92,8 @@ export default class ListAlbums extends Component {
             noDataText={"Loading data..."}
           >
           </ReactTable>
+        
+
         </div>
       );
     }

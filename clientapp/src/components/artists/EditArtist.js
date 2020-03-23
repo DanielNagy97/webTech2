@@ -28,6 +28,7 @@ export default class EditArtist extends Component {
         if (this.state.id !== undefined){
             axios.get("http://"+hostname+":9000/artists/"+this.state.id)
             .then(res => {
+                console.log(res.data)
                 this.setState({
                     name:res.data.name,
                     country:res.data.country,
@@ -35,6 +36,7 @@ export default class EditArtist extends Component {
                 })
             })
         }
+
 
     }
 

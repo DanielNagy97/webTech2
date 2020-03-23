@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+//User = require('./User'), userSchema = User.schema;
+
 const ArtistSchema = mongoose.Schema({
     name: {
         type: String,
@@ -15,6 +17,7 @@ const ArtistSchema = mongoose.Schema({
     },
     postedBy: {
         type: String,
+        ref:'User',
         required: true
     }
 });

@@ -8,7 +8,6 @@ router.post('/', async (req, res) => {
     const album = new Album({
         title: req.body.title,
         artist: req.body.artist,
-        country: req.body.country,
         year: req.body.year,
         genre: req.body.genre,
         style: req.body.style,
@@ -26,7 +25,7 @@ router.post('/', async (req, res) => {
 //NOTE: Needs limiting and/or slicing
 router.get('/', async (req, res) => {
     try{
-        const albums = await Album.find();
+        const albums = await Album.find().populate('artist', ['name', 'country']);
         res.json(albums)
     }catch(err){
         res.json({message: err})
@@ -47,7 +46,7 @@ router.get('/sortTitle/:order', async (req, res) => {
 //Get album by given id in params
 router.get('/:albumId', async (req, res) =>{
     try{
-        const album = await Album.findById(req.params.albumId);
+        const album = await Album.findById(req.params.albumId).populate('artist', ['name', 'country']);
         res.json(album);
     }catch(err){
         res.json({message: err});
@@ -73,7 +72,6 @@ router.patch('/:albumId', async (req, res) =>{
             {$set: {
                 title: req.body.title,
                 artist: req.body.artist,
-                country: req.body.country,
                 year: req.body.year,
                 genre: req.body.genre,
                 style: req.body.style,

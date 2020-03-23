@@ -8,8 +8,9 @@ const config = require('config');
 const expressjwt = require("express-jwt");
 mongoose.set('useCreateIndex', true);
 
-const albumsRoute = require('./routes/albums');
 const artistsRoute = require('./routes/artists');
+const albumsRoute = require('./routes/albums');
+
 const users = require('./routes/users');
 const auth = require('./routes/auth');
 
@@ -25,8 +26,9 @@ app.get('/', (req, res) => {
     res.send('We are on home');
 });
 
-app.use('/albums', albumsRoute);
 app.use('/artists', artistsRoute);
+app.use('/albums', albumsRoute);
+
 app.use('/users', users);
 app.use('/auth', auth);
 

@@ -44,7 +44,7 @@ router.get('/sortName/:order', async (req, res) => {
 //Get artist by given id in params
 router.get('/:artistId', async (req, res) =>{
     try{
-        const artist = await Artist.findById(req.params.artistId);
+        const artist = await Artist.findById(req.params.artistId).populate('postedBy', ['name','email']);
         res.json(artist);
     }catch(err){
         res.json({message: err});

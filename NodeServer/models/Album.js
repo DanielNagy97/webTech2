@@ -7,10 +7,7 @@ const AlbumSchema = mongoose.Schema({
     },
     artist: {
         type: String,
-        required: true
-    },
-    country: {
-        type: String,
+        ref:'Artists',
         required: true
     },
     year: {

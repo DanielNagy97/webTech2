@@ -74,6 +74,7 @@ export default class ListArtists extends Component {
           minWidth:170
         }
       ]
+      console.log(this.state.artists)
       return (
         <div className="cointainer">
           <h2>List of artists</h2>

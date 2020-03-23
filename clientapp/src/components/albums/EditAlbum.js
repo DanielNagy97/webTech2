@@ -9,7 +9,6 @@ export default class AddAlbum extends Component {
         super(props);
         this.onChangeTitle = this.onChangeTitle.bind(this);
         this.onChangeArtist = this.onChangeArtist.bind(this);
-        this.onChangeCountry = this.onChangeCountry.bind(this);
         this.onChangeYear = this.onChangeYear.bind(this);
         this.onChangeGenre = this.onChangeGenre.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -17,7 +16,6 @@ export default class AddAlbum extends Component {
         this.state = {
             title: '',
             artist: '',
-            country: '',
             year: 0,
             genre: '',
             style: [''],
@@ -34,8 +32,8 @@ export default class AddAlbum extends Component {
         .then(res => {
             if (res.data.length > 0){
                 this.setState({
-                    artists : res.data.map(artist => artist.name),
-                    artist : res.data[0].name,
+                    artists : res.data,
+                    artist : res.data[0]._id,
                     genres: [   "Avant-garde",
                                 "Blues",
                                 "Caribbean and Caribbean-influenced",
@@ -55,13 +53,13 @@ export default class AddAlbum extends Component {
                     genre: "Rock",
                 })
             }})
+        
         if (this.state.id !== undefined){
             axios.get("http://"+hostname+":9000/albums/"+this.state.id)
             .then(res => {
                 this.setState({
                 title: res.data.title,
-                artist: res.data.artist,
-                country: res.data.country,
+                artist: res.data.artist._id,
                 year: res.data.year,
                 genre: res.data.genre,
                 style: res.data.style,
@@ -81,12 +79,6 @@ export default class AddAlbum extends Component {
     onChangeArtist(e){
         this.setState({
             artist: e.target.value
-        });
-    }
-
-    onChangeCountry(e){
-        this.setState({
-            country: e.target.value
         });
     }
 
@@ -139,7 +131,6 @@ export default class AddAlbum extends Component {
         const album = {
             title: this.state.title,
             artist: this.state.artist,
-            country: this.state.country,
             year: this.state.year,
             genre: this.state.genre,
             style: this.state.style,
@@ -168,6 +159,7 @@ export default class AddAlbum extends Component {
 
     render(){
         console.log(this.state)
+        console.log(this.state.artists)
       return (
             <div>
                 <h2>Edit album</h2>
@@ -194,22 +186,11 @@ export default class AddAlbum extends Component {
                                     this.state.artists.map( function(artist, key){
                                         return(
                                             <option key={key}
-                                                value={artist}>{artist}</option>
+                                                value={artist._id}>{artist.name}</option>
                                         )
                                     })
                                 }
                         </select>
-                        <div className="valid-feedback">Valid.</div>
-                        <div className="invalid-feedback">Please fill out this field.</div>
-                    </div>
-
-                    <div className="form-group">
-                        <label>Country: </label>
-                        <input type="text"
-                            className="form-control"
-                            value={this.state.country}
-                            onChange={this.onChangeCountry} required>
-                        </input>
                         <div className="valid-feedback">Valid.</div>
                         <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
