@@ -10,6 +10,7 @@ mongoose.set('useCreateIndex', true);
 
 const artistsRoute = require('./routes/artists');
 const albumsRoute = require('./routes/albums');
+const copiesRoute = require('./routes/copies')
 
 const users = require('./routes/users');
 const auth = require('./routes/auth');
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 
 app.use('/artists', artistsRoute);
 app.use('/albums', albumsRoute);
+app.use('/copies', copiesRoute);
 
 app.use('/users', users);
 app.use('/auth', auth);

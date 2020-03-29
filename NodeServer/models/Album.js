@@ -28,6 +28,11 @@ const AlbumSchema = mongoose.Schema({
         type: [String],
         required: true,
         default: undefined
+    },
+    postedBy: {
+        type: String,
+        ref:'User',
+        required: true
     }
 });
 

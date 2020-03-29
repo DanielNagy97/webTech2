@@ -19,12 +19,22 @@ export default class ListAlbums extends Component {
     }
 
     updateDatas(){
-      axios.get("http://"+hostname+":9000/albums")
-      .then(res => {
-          this.setState({
-            albums:res.data
-          })
-      })
+      if(this.props.url !== undefined){
+        axios.get("http://"+hostname+":9000/albums/"+this.props.url)
+        .then(res => {
+            this.setState({
+              albums:res.data
+            })
+        })
+      }
+      else{
+        axios.get("http://"+hostname+":9000/albums")
+        .then(res => {
+            this.setState({
+              albums:res.data
+            })
+        })
+      }
     }
 
     deleteItem(index){
@@ -82,18 +92,14 @@ export default class ListAlbums extends Component {
 
       return (
         <div className="cointainer">
-          <h2>List of albums</h2>
-
           <ReactTable
             columns={columns}
             data={this.state.albums}
             filterable
-            defaultPageSize={10}
+            defaultPageSize={5}
             noDataText={"Loading data..."}
           >
           </ReactTable>
-        
-
         </div>
       );
     }

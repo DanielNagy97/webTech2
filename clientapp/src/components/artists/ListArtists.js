@@ -20,12 +20,23 @@ export default class ListArtists extends Component {
     }
 
     updateDatas(){
-      axios.get("http://"+hostname+":9000/artists")
-      .then(res => {
-          this.setState({
-            artists:res.data
-          })
-      })
+      if(this.props.url !== undefined){
+        axios.get("http://"+hostname+":9000/artists/"+this.props.url)
+        .then(res => {
+            this.setState({
+              artists:res.data
+            })
+        })
+      }
+      else{
+        axios.get("http://"+hostname+":9000/artists")
+        .then(res => {
+            this.setState({
+              artists:res.data
+            })
+        })
+      }
+
     }
 
     deleteItem(index){
@@ -77,15 +88,13 @@ export default class ListArtists extends Component {
       console.log(this.state.artists)
       return (
         <div className="cointainer">
-          <h2>List of artists</h2>
           <ReactTable
             columns={columns}
             data={this.state.artists}
             filterable
-            defaultPageSize={10}
+            defaultPageSize={5}
             noDataText={"Loading data..."}
           >
-
           </ReactTable>
         </div>
       );

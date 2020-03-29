@@ -29,7 +29,13 @@ export default class Navbar extends Component {
                         <Link to="/artists/add" className="nav-link">Add new artist</Link>
                     </li>
                     <li className="nav-item">
+                        <Link to="/copies/add" className="nav-link">Add new copy to my collection</Link>
+                    </li>
+                    <li className="nav-item">
                         <Link to="/profile" className="nav-link">Profile</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to="/users" className="nav-link">Users</Link>
                     </li>
                     <li className="nav-item">
                         <button type="button" className="btn btn-info" onClick={()=>Logout()}>Logout</button>

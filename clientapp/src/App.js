@@ -14,6 +14,9 @@ import LoginForm from "./components/login/LoginForm"
 import RegisterForm from "./components/login/RegisterForm"
 import UsrProfile from "./components/user/UsrProfile"
 import EditProfile from "./components/user/EditProfile"
+import ListUsers from "./components/user/ListUsers"
+import ListCopies from "./components/copies/ListCopies"
+import EditCopy from "./components/copies/EditCopy"
 
 export const hostname = window.location.hostname;
 
@@ -51,6 +54,12 @@ class App extends Component {
 
             <Route path="/profile" exact component={UsrProfile} />
             <Route path="/profile/edit" exact component={EditProfile} />
+            <Route path="/users" exact component={ListUsers} />
+            <Route path="/users/:id" exact component={UsrProfile} />
+
+            <Route path="/copies" exact component={ListCopies} />
+            <Route path="/copies/add" exact component={EditCopy} />
+            <Route path="/copies/edit/:id" exact component={EditCopy} />
           </div>
           <Footer />
         </Router>

@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
 //NOTE: Needs limiting and/or slicing
 router.get('/', async (req, res) => {
     try{
-        const artists = await Artist.find();
+        const artists = await Artist.find().populate('postedBy', ['name', 'email']);
         res.json(artists)
     }catch(err){
         res.json({message: err})
@@ -45,6 +45,17 @@ router.get('/sortName/:order', async (req, res) => {
 router.get('/:artistId', async (req, res) =>{
     try{
         const artist = await Artist.findById(req.params.artistId).populate('postedBy', ['name','email']);
+        res.json(artist);
+    }catch(err){
+        res.json({message: err});
+    }
+});
+
+//Get artists posted by given user in param
+router.get('/postedBy/:userId', async (req, res) =>{
+    try{
+        const artist = await Artist.find({postedBy: req.params.userId})
+        .populate('postedBy', ['name', 'email']);
         res.json(artist);
     }catch(err){
         res.json({message: err});

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
+import cookie from 'js-cookie';
 import {hostname} from '../../App';
 
 
@@ -134,7 +134,8 @@ export default class AddAlbum extends Component {
             year: this.state.year,
             genre: this.state.genre,
             style: this.state.style,
-            tracklist: this.state.tracklist
+            tracklist: this.state.tracklist,
+            postedBy: cookie.get("usr_id")
         }
         console.log(album)
         axios.patch("http://"+hostname+":9000/albums/"+this.state.id, album)
