@@ -131,7 +131,7 @@ export default class EditCopy extends Component {
                 this.setState({
                     id:res.data._id
                 });
-                this.props.history.push('/copies/edit/'+this.state.id);          
+                this.props.history.push('profile/copies/edit/'+this.state.id);          
             })
         }
     }

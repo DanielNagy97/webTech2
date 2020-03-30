@@ -26,7 +26,6 @@ export default class ShowAlbum extends Component {
   }
   render(){
     let link = "/albums/edit/"+this.state.id;
-    console.log(this.state.album)
     if(this.state.album !== undefined){
 
       return (

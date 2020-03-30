@@ -12,12 +12,12 @@ export default class ViewSubmitted extends Component {
 
     render(){
         return (
-            <Accordion>
+            <Accordion defaultActiveKey="0">
 
                 <Card>
                     <Card.Header>
                         <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                            Users Copies
+                            Collection
                         </Accordion.Toggle>
                     </Card.Header>
                     <Accordion.Collapse eventKey="0">

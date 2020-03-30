@@ -81,7 +81,7 @@ export default class ListCopies extends Component {
         {
           Header: "Actions",
           Cell:props=>{
-            let link = "/copies/edit/"+props.original._id;
+            let link = "/profile/copies/edit/"+props.original._id;
             let loggedInUSER = cookie.get("usr_id");
             if(props.original.owner._id === loggedInUSER){
                 return(

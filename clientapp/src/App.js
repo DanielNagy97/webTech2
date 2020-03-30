@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import cookie from 'js-cookie'
+import cookie from 'js-cookie';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import './css/index.css';
+
+import LoginForm from "./components/login/LoginForm";
+import RegisterForm from "./components/login/RegisterForm";
+
 import NavBar from "./components/NavBar";
-import ListAlbums from "./components/albums/ListAlbums";
-import ListArtists from "./components/artists/ListArtists";
-import EditAlbum from "./components/albums/EditAlbum";
-import EditArtist from "./components/artists/EditArtist"
-import ShowAlbum from "./components/albums/ShowAlbum"
-import Header from "./components/Header"
-import Footer from "./components/Footer"
-import LoginForm from "./components/login/LoginForm"
-import RegisterForm from "./components/login/RegisterForm"
-import UsrProfile from "./components/user/UsrProfile"
-import EditProfile from "./components/user/EditProfile"
+import Footer from "./components/Footer";
+import AlbumsPage from "./components/AlbumsPage";
+import ArtistsPage from "./components/ArtistsPage";
 import ListUsers from "./components/user/ListUsers"
-import ListCopies from "./components/copies/ListCopies"
-import EditCopy from "./components/copies/EditCopy"
+import UsrProfile from "./components/user/UsrProfile"
+
 
 export const hostname = window.location.hostname;
 
@@ -39,27 +37,17 @@ class App extends Component {
       return (
         <Router>
           <NavBar />
-          <Header />
           <div className="container">
-            <Route path="/" exact component={ListAlbums} />
+          <Route path="/" exact component={AlbumsPage} />
 
-            <Route path="/albums" exact component={ListAlbums} />
-            <Route path="/albums/add" exact component={EditAlbum} />
-            <Route path="/albums/edit/:id" exact component={EditAlbum} />
-            <Route path="/album/:id" exact component={ShowAlbum} />
-
-            <Route path="/artists" exact component={ListArtists} />
-            <Route path="/artists/add" exact component={EditArtist} />
-            <Route path="/artists/edit/:id" exact component={EditArtist} />
-
-            <Route path="/profile" exact component={UsrProfile} />
-            <Route path="/profile/edit" exact component={EditProfile} />
+            <Route path="/albums" component={AlbumsPage} />
+            <Route path="/artists" component={ArtistsPage} />
             <Route path="/users" exact component={ListUsers} />
-            <Route path="/users/:id" exact component={UsrProfile} />
 
-            <Route path="/copies" exact component={ListCopies} />
-            <Route path="/copies/add" exact component={EditCopy} />
-            <Route path="/copies/edit/:id" exact component={EditCopy} />
+            <Route path="/profile" component={UsrProfile} />
+
+            <Route path="/user/:id" exact component={UsrProfile} />
+
           </div>
           <Footer />
         </Router>

@@ -71,7 +71,7 @@ export default class ListAlbums extends Component {
         {
           Header: "Actions",
           Cell:props=>{
-            let link = "/album/"+props.original._id
+            let link = "/albums/view/"+props.original._id
             return(
               <div>
                 <Link to={link} className="btn btn-info">View it</Link>
@@ -96,7 +96,7 @@ export default class ListAlbums extends Component {
             columns={columns}
             data={this.state.albums}
             filterable
-            defaultPageSize={5}
+            defaultPageSize={10}
             noDataText={"Loading data..."}
           >
           </ReactTable>

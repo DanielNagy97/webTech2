@@ -31,6 +31,7 @@ export default class AddAlbum extends Component {
         axios.get("http://"+hostname+":9000/artists")
         .then(res => {
             if (res.data.length > 0){
+                console.log(res.data[0]._id)
                 this.setState({
                     artists : res.data,
                     artist : res.data[0]._id,

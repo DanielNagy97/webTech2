@@ -40,7 +40,7 @@ export default class ListUsers extends Component {
         {
           Header: "Actions",
           Cell:props=>{
-            let link = "/users/"+props.original._id
+            let link = "/user/"+props.original._id
             return(
               <div>
                 <Link to={link} className="btn btn-info">View Profile</Link>

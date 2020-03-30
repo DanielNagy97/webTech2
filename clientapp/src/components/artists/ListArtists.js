@@ -92,7 +92,7 @@ export default class ListArtists extends Component {
             columns={columns}
             data={this.state.artists}
             filterable
-            defaultPageSize={5}
+            defaultPageSize={10}
             noDataText={"Loading data..."}
           >
           </ReactTable>

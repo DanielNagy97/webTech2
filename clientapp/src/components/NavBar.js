@@ -1,57 +1,74 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import cookie from 'js-cookie'
-import Logout from "./login/Logout.js"
+import axios from 'axios';
 
-export default class Navbar extends Component {
+import {hostname} from '../App'
+
+import Logout from "./login/Logout.js"
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+import NavDropdown from 'react-bootstrap/NavDropdown'
+
+export default class NavbarTop extends Component {
+    constructor(props){
+        super(props);    
+        this.state = {
+            usr_id: cookie.get('usr_id'),
+            token: cookie.get('token'),
+            usr_name: ""
+        }
+    }
+
+    componentDidMount(){
+        axios.get("http://"+hostname+":9000/users/"+this.state.usr_id, {
+        headers: { Authorization: "Bearer " + this.state.token }
+        }).then(res => {
+            this.setState({
+                usr_name:res.data.name
+            });
+        })
+    }
 
     render(){
-        const token = cookie.get('token');
-        if(token){
-        console.log("logged in");
-        }
+
         return (
-            <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
+            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" id="navbar">
+            <Navbar.Brand>
+                <Link to="/" className="text-decoration-none text-reset">Home</Link>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
 
-                <Link className="navbar-brand" to="/">Logo</Link>
-                
-                <ul className="navbar-nav">
-                    <li className="nav-item">
-                        <Link to="/" className="nav-link">Albums</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/artists" className="nav-link">Artists</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/albums/add" className="nav-link">Add new album</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/artists/add" className="nav-link">Add new artist</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/copies/add" className="nav-link">Add new copy to my collection</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/profile" className="nav-link">Profile</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/users" className="nav-link">Users</Link>
-                    </li>
-                    <li className="nav-item">
-                        <button type="button" className="btn btn-info" onClick={()=>Logout()}>Logout</button>
-                    </li>
-                    
-                </ul>
+                <Nav className="mr-auto">
+                    <Link to="/albums" className="nav-link">Albums</Link>
+                    <Link to="/artists" className="nav-link">Artists</Link>
+                    <Link to="/users" className="nav-link">Users</Link>
+                </Nav>
 
-                {/*
-                <div className="ml-auto">
-                    <form className="form-inline" action="/#">
-                        <input className="form-control mr-sm-2" type="text" placeholder="Search"></input>
-                        <button className="btn btn-success" type="submit">Search</button>
-                    </form>
-                </div>
-                */}
-            </nav>
+                <Nav>
+                    <NavDropdown alignRight title={this.state.usr_name} id="collasible-nav-dropdown">
+
+                        <NavDropdown.Item className="dropleft">
+                            <Link to="/profile" className="text-decoration-none text-reset">Profile</Link>
+                        </NavDropdown.Item>
+
+                        <NavDropdown.Item>
+                            <Link to="/profile/copies/add" className="text-decoration-none text-reset">Add new to Collection</Link>
+                        </NavDropdown.Item>
+
+                        <NavDropdown.Divider />
+                        
+                        <NavDropdown.Item>
+                            <button className="btn btn-secondary btn-block" onClick={()=>Logout()}>Logout</button>
+                        </NavDropdown.Item>
+
+                    </NavDropdown>
+
+                </Nav>
+
+            </Navbar.Collapse>
+            </Navbar>
       );
     }
 }
