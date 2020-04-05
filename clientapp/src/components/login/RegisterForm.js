@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-import {hostname} from '../../App'
+import {hostname} from '../../App';
+import AlertMessage from '../AlertMessage';
 
 
 export default class RegisterForm extends Component {
@@ -18,8 +19,7 @@ export default class RegisterForm extends Component {
             name: '',
             email: '',
             password: '',
-            formClass : "",
-            isSuccess: false
+            alert:""
         }
     }
 
@@ -52,31 +52,13 @@ export default class RegisterForm extends Component {
         axios.post("http://"+hostname+":9000/users", user)
             .then(res => {
                 console.log(res.data);
+            })
+            .catch(error => {
+                console.log(error.response.data)
                 this.setState({
-                    isSuccess : true
+                    alert: error.response.data
                 })
             })
-    }
-
-    validate(e){
-        this.setState({formClass: "was-validated"});
-        const user = {
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password
-        }
-
-        let emptyInputs=[];
-        Object.keys(user).map((key, i) => {
-            if(user[key] === ""){
-                emptyInputs.push(key);
-            }
-            return null
-        })
-
-        if(emptyInputs.length > 0){
-            console.log(emptyInputs)
-        }
     }
 
     render(){
@@ -86,7 +68,7 @@ export default class RegisterForm extends Component {
         return (
             <div>
                 <h2>Register</h2>
-                <form onSubmit={this.onSubmit} className={this.state.formClass}>
+                <form onSubmit={this.onSubmit}>
 
                     <div className="form-group">
                         <label>Name: </label>
@@ -120,11 +102,15 @@ export default class RegisterForm extends Component {
                         <div className="valid-feedback">Valid.</div>
                         <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
+                    {
+                        this.state.alert ?
+                            <p>{this.state.alert}</p>
+                        : <br/>
+                    }
 
                     <button type="submit"
                             value="Edit the artist"
-                            className="btn btn-primary"
-                            onClick={()=>{this.validate()}}>
+                            className="btn btn-primary">
                                 Register
                         </button>
                 </form>

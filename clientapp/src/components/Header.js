@@ -4,7 +4,6 @@ import Carousel from 'react-bootstrap/Carousel'
 
 export default class Header extends Component {
     render(){
-      console.log(this.props.data)
         return (
             <Carousel>
               {

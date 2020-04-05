@@ -5,18 +5,26 @@ const Artist = require('../models/Artist');
 
 //Post a new artist
 router.post('/', async (req, res) => {
-    const artist = new Artist({
-        name: req.body.name,
-        country: req.body.country,
-        description: req.body.description,
-        postedBy: req.body.postedBy
-    });
-    try{
-    const saveArtist = await artist.save();
-    res.json(saveArtist);
-    }catch(err){
-        res.json({message: err})
+
+    // Check if this artist already exisits
+    let artist = await Artist.findOne({ name: req.body.name });
+    if (artist) {
+        return res.status(400).send('The artist: '+req.body.name+' already exisits!');
+    } else {
+        artist = new Artist({
+            name: req.body.name,
+            country: req.body.country,
+            description: req.body.description,
+            postedBy: req.body.postedBy
+        });
+        try{
+        const saveArtist = await artist.save();
+        res.json(saveArtist);
+        }catch(err){
+            res.json({message: err})
+        }
     }
+
 });
 
 //Get all the artists

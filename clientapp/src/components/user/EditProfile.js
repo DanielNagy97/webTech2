@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import cookie from 'js-cookie';
 
-import {hostname} from '../../App'
+import {hostname} from '../../App';
+import AlertMessage from '../AlertMessage';
 
 
 export default class EditProfile extends Component {
@@ -20,9 +21,9 @@ export default class EditProfile extends Component {
             email: '',
             password: '',
             formClass : "",
-            isSuccess: false,
             token: cookie.get('token'),
-            usr_id: cookie.get('usr_id')
+            usr_id: cookie.get('usr_id'),
+            alert: undefined
         }
     }
 
@@ -67,37 +68,27 @@ export default class EditProfile extends Component {
             headers: { Authorization: "Bearer " + this.state.token }
             })
             .then(res => {
-                console.log(res.data);
                 this.setState({
-                    isSuccess : true
-                })
-            })
-    }
-
-    validate(e){
-        this.setState({formClass: "was-validated"});
-        const user = {
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password
-        }
-
-        let emptyInputs=[];
-        Object.keys(user).map((key, i) => {
-            if(user[key] === ""){
-                emptyInputs.push(key);
-            }
-            return null
-        })
-
-        if(emptyInputs.length > 0){
-            console.log(emptyInputs)
-        }
+                    alert:{
+                        message:{
+                                head: "Success!",
+                                body: "The modification was successfull."
+                            },
+                        variant: "success"
+                        }
+                });  
+            });
     }
 
     render(){
         return (
             <div>
+                {
+                    this.state.alert ?
+                        <AlertMessage message={this.state.alert.message}
+                                                 variant={this.state.alert.variant}/>
+                    : null
+                }
                 <h2>Edit Profile</h2>
                 <form onSubmit={this.onSubmit} className={this.state.formClass}>
 
@@ -136,8 +127,7 @@ export default class EditProfile extends Component {
 
                     <button type="submit"
                             value="Edit the artist"
-                            className="btn btn-primary"
-                            onClick={()=>{this.validate()}}>
+                            className="btn btn-primary">
                                 Save Profile
                         </button>
                 </form>

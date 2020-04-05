@@ -3,6 +3,7 @@ import axios from 'axios'
 import cookie from 'js-cookie';
 
 import {hostname} from '../../App';
+import AlertMessage from '../AlertMessage';
 
 export default class EditCopy extends Component {
   constructor(props){
@@ -26,7 +27,8 @@ export default class EditCopy extends Component {
             id: this.props.match.params.id,
             formClass : "",
             conditions:[],
-            albums:[]
+            albums:[],
+            alert: undefined
         }
     }
 
@@ -44,15 +46,17 @@ export default class EditCopy extends Component {
         ]
         axios.get("http://"+hostname+":9000/albums/")
             .then(res => {
-                console.log(res.data)
-                albums = res.data
-                this.setState({
-                    album:albums[0]._id,
-                    albums:albums,
-                    conditions: conditions,
-                    mediaCond: conditions[0],
-                    sleeveCond: conditions[0]
-                })
+                if (res.data.length > 0){
+                    console.log(res.data)
+                    albums = res.data
+                    this.setState({
+                        album:albums[0]._id,
+                        albums:albums,
+                        conditions: conditions,
+                        mediaCond: conditions[0],
+                        sleeveCond: conditions[0]
+                    })
+                }
             })
 
         if (this.state.id !== undefined){
@@ -122,16 +126,35 @@ export default class EditCopy extends Component {
         console.log(copy)
         if (this.state.id !== undefined){
             axios.patch("http://"+hostname+":9000/copies/"+this.state.id, copy)
-            .then(res => console.log(res.data));
+            .then(res => {
+                this.setState({
+                    formClass: "was-validated",
+                    alert:{
+                        message:{
+                                head: "Success!",
+                                body: "The modification was successfull."
+                            },
+                        variant: "success"
+                        }
+                });  
+            });
         }
         else{
             axios.post("http://"+hostname+":9000/copies", copy)
             .then(res => {
                 console.log(res.data)
                 this.setState({
-                    id:res.data._id
+                    formClass: "was-validated",
+                    id:res.data._id,
+                    alert:{
+                        message:{
+                                head: "Success!",
+                                body: "The saving was successfull."
+                            },
+                        variant: "success"
+                        }
                 });
-                this.props.history.push('profile/copies/edit/'+this.state.id);          
+                window.history.pushState("object or string", "Page Title", "/artists/edit/"+this.state.id);
             })
         }
     }
@@ -140,6 +163,12 @@ export default class EditCopy extends Component {
         console.log(this.state)
       return (
             <div>
+                {
+                    this.state.alert ?
+                        <AlertMessage message={this.state.alert.message}
+                                                 variant={this.state.alert.variant}/>
+                    : null
+                }
                 <h2>Edit Copy</h2>
                 <form onSubmit={this.onSubmit} className={this.state.formClass}>
 

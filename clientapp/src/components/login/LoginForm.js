@@ -18,8 +18,8 @@ export default class LoginForm extends Component {
         this.state = {
             email: '',
             password: '',
-            formClass : "",
-            token: false
+            token: false,
+            error: ""
         }
     }
 
@@ -51,27 +51,12 @@ export default class LoginForm extends Component {
                 })
                 window.location.reload();
             })
-
-    }
-
-    validate(e){
-        this.setState({formClass: "was-validated"});
-        const user = {
-            email: this.state.email,
-            password: this.state.password
-        }
-
-        let emptyInputs=[];
-        Object.keys(user).map((key, i) => {
-            if(user[key] === ""){
-                emptyInputs.push(key);
-            }
-            return null
-        })
-
-        if(emptyInputs.length > 0){
-            console.log(emptyInputs)
-        }
+            .catch(error => {
+                console.log(error.response)
+                this.setState({
+                    error: error.response.data
+                })
+            })
     }
 
     render(){
@@ -82,7 +67,7 @@ export default class LoginForm extends Component {
 
             <div>
                 <h2>Login</h2>
-                <form onSubmit={this.onSubmit} className={this.state.formClass}>
+                <form onSubmit={this.onSubmit}>
 
                     <div className="form-group">
                         <label>Email: </label>
@@ -105,11 +90,13 @@ export default class LoginForm extends Component {
                         <div className="valid-feedback">Valid.</div>
                         <div className="invalid-feedback">Please fill out this field.</div>
                     </div>
+                    {
+                        (this.state.error !=="" ? <p>{this.state.error}</p>:<br/>)
+                    }
 
                     <button type="submit"
                             value="Edit the artist"
-                            className="btn btn-primary"
-                            onClick={()=>{this.validate()}}>
+                            className="btn btn-primary">
                                 Login
                     </button>
                     <Link to={"/register"} className="btn btn-info">Register</Link>

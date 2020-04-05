@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import Alert from 'react-bootstrap/Alert'
+
 import axios from 'axios'
-import { useState } from 'react';
+
 import cookie from 'js-cookie';
 
 import {hostname} from '../../App';
+import AlertMessage from '../AlertMessage';
 
 export default class EditArtist extends Component {
   constructor(props){
@@ -20,7 +21,8 @@ export default class EditArtist extends Component {
             country: '',
             description: '',
             id: this.props.match.params.id,
-            formClass : ""
+            formClass : "",
+            alert: undefined
         }
     }
 
@@ -28,7 +30,6 @@ export default class EditArtist extends Component {
         if (this.state.id !== undefined){
             axios.get("http://"+hostname+":9000/artists/"+this.state.id)
             .then(res => {
-                console.log(res.data)
                 this.setState({
                     name:res.data.name,
                     country:res.data.country,
@@ -66,50 +67,64 @@ export default class EditArtist extends Component {
             description: this.state.description,
             postedBy: cookie.get("usr_id")
         }
-        console.log(artist)
         if (this.state.id !== undefined){
             axios.patch("http://"+hostname+":9000/artists/"+this.state.id, artist)
-            .then(res => console.log(res.data));
+            .then(res => {
+                this.setState({
+                    alert:{
+                        message:{
+                                head: "Success!",
+                                body: "The modification was successfull."
+                            },
+                        variant: "success"
+                        },
+                        formClass: "was-validated"
+                });  
+            });
         }
         else{
             axios.post("http://"+hostname+":9000/artists", artist)
             .then(res => {
-                console.log(res.data)
                 this.setState({
-                    id:res.data._id
+                    formClass: "was-validated",
+                    id:res.data._id,
+                    alert:{
+                        message:{
+                                head: "Success!",
+                                body: "The saving was successfull."
+                            },
+                        variant: "success"
+                        }
                 });
-                this.props.history.push('/artists/edit/'+this.state.id);          
+
+                window.history.pushState("object or string", "Page Title", "/artists/edit/"+this.state.id);
+            })
+            .catch(error => {
+                this.setState({
+                    formClass: "was-validated",
+                    alert:{
+                        message:{
+                                head: error.response.data,
+                                body: "Please change that and try again!"
+                            },
+                        variant: "danger"
+                        }
+                })
             })
 
         }
     }
 
-    validate(e){
-        this.setState({formClass: "was-validated"});
-        const artist = {
-            name: this.state.name,
-            country: this.state.country,
-            description: this.state.description
-        }
-
-        let emptyInputs=[];
-        Object.keys(artist).map((key, i) => {
-            if(artist[key] === ""){
-                emptyInputs.push(key);
-            }
-            return null
-        })
-
-        if(emptyInputs.length > 0){
-            console.log(emptyInputs)
-        }
-    }
-
     render(){
-        console.log(this.state.id)
       return (
             <div>
-                <AlertDismissibleExample />
+                {
+                    this.state.alert ?
+                        <AlertMessage message={this.state.alert.message}
+                                                 variant={this.state.alert.variant}/>
+                    : null
+                }
+                
                 <h2>Edit artist</h2>
                 <form onSubmit={this.onSubmit} className={this.state.formClass}>
 
@@ -148,31 +163,11 @@ export default class EditArtist extends Component {
 
                     <button type="submit"
                             value="Edit the artist"
-                            className="btn btn-primary"
-                            onClick={()=>{this.validate()}}>
+                            className="btn btn-primary">
                                 Save
                         </button>
                 </form>
             </div>
       );
     }
-}
-
-
-function AlertDismissibleExample() {
-    const [show, setShow] = useState(true);
-  
-    if (show) {
-      return (
-        <Alert variant="danger" onClose={() => setShow(false)} dismissible>
-          <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-          <p>
-            Change this and that and try again. Duis mollis, est non commodo
-            luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-            Cras mattis consectetur purus sit amet fermentum.
-          </p>
-        </Alert>
-      );
-    }
-    return <button onClick={() => setShow(true)}>Show Alert</button>;
 }

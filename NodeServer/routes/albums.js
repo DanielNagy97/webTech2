@@ -5,21 +5,29 @@ const Album = require('../models/Album');
 
 //Post a new album
 router.post('/', async (req, res) => {
-    const album = new Album({
-        title: req.body.title,
-        artist: req.body.artist,
-        year: req.body.year,
-        genre: req.body.genre,
-        style: req.body.style,
-        tracklist: req.body.tracklist,
-        postedBy: req.body.postedBy
-    });
-    try{
-    const saveAlbum = await album.save();
-    res.json(saveAlbum);
-    }catch(err){
-        res.json({message: err})
+
+    let album = await Album.findOne({ title: req.body.title, artist: req.body.artist});
+
+    if (album) {
+        return res.status(400).send('The album: '+req.body.title+' already exisits!');
+    } else {
+        album = new Album({
+            title: req.body.title,
+            artist: req.body.artist,
+            year: req.body.year,
+            genre: req.body.genre,
+            style: req.body.style,
+            tracklist: req.body.tracklist,
+            postedBy: req.body.postedBy
+        });
+        try{
+        const saveAlbum = await album.save();
+        res.json(saveAlbum);
+        }catch(err){
+            res.json({message: err})
+        }
     }
+
 });
 
 //Get all the albums

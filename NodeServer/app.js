@@ -5,27 +5,21 @@ const bodyParser = require('body-parser');
 const cors = require('cors');	
 
 const config = require('config');
-const expressjwt = require("express-jwt");
 mongoose.set('useCreateIndex', true);
-
-const artistsRoute = require('./routes/artists');
-const albumsRoute = require('./routes/albums');
-const copiesRoute = require('./routes/copies')
-
-const users = require('./routes/users');
-const auth = require('./routes/auth');
 
 if (!config.get('PrivateKey')) {
     console.error('FATAL ERROR: PrivateKey is not defined.');
     process.exit(1);
 }
 
+const artistsRoute = require('./routes/artists');
+const albumsRoute = require('./routes/albums');
+const copiesRoute = require('./routes/copies')
+const users = require('./routes/users');
+const auth = require('./routes/auth');
+
 app.use(cors());
 app.use(bodyParser.json());
-
-app.get('/', (req, res) => {
-    res.send('We are on home');
-});
 
 app.use('/artists', artistsRoute);
 app.use('/albums', albumsRoute);
@@ -34,15 +28,9 @@ app.use('/copies', copiesRoute);
 app.use('/users', users);
 app.use('/auth', auth);
 
-
-//logged in route
-const jwtCheck = expressjwt({    
-    secret: config.get('PrivateKey')
+app.get('/', (req, res) => {
+    res.send('We are on home');
 });
-app.get("/secret", jwtCheck, (req, res) => {
-    res.status(200).send("Only logged in people can see me");
-});
-
 
 dbURL = 'mongodb://localhost:27017/WebTech2'
 mongoose.connect(dbURL,

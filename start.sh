@@ -9,8 +9,8 @@ fi
 
 sudo service mongodb stop
 
-mate-terminal --command="bash -c 'cd mongoDB && ./startDB.sh'" &
-mate-terminal --command="bash -c 'cd ./NodeServer && export default PrivateKey=$1 && npm start'" &
-mate-terminal --command="bash -c 'cd clientapp && npm start'"
+gnome-terminal -e "bash -c 'cd mongoDB && ./startDB.sh'" &
+gnome-terminal -e "bash -c 'cd ./NodeServer && export default PrivateKey=$1 && npm start'" &
+gnome-terminal -e "bash -c 'cd clientapp && npm start'"
 wait
 exit 0

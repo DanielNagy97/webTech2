@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import cookie from 'js-cookie';
 import {hostname} from '../../App';
+import AlertMessage from '../AlertMessage';
 
 
 export default class AddAlbum extends Component {
@@ -23,7 +24,8 @@ export default class AddAlbum extends Component {
             artists: [],
             genres: [],
             id: this.props.match.params.id,
-            formClass : ""
+            formClass : "",
+            alert: undefined
         }
     }
 
@@ -31,7 +33,6 @@ export default class AddAlbum extends Component {
         axios.get("http://"+hostname+":9000/artists")
         .then(res => {
             if (res.data.length > 0){
-                console.log(res.data[0]._id)
                 this.setState({
                     artists : res.data,
                     artist : res.data[0]._id,
@@ -138,32 +139,65 @@ export default class AddAlbum extends Component {
             tracklist: this.state.tracklist,
             postedBy: cookie.get("usr_id")
         }
-        console.log(album)
-        axios.patch("http://"+hostname+":9000/albums/"+this.state.id, album)
-            .then(res => console.log(res.data));
 
         if (this.state.id !== undefined){
             axios.patch("http://"+hostname+":9000/albums/"+this.state.id, album)
-            .then(res => console.log(res.data));
+            .then(res => {
+                this.setState({
+                    formClass: "was-validated",
+                    alert:{
+                        message:{
+                                head: "Success!",
+                                body: "The modification was successfull."
+                            },
+                        variant: "success"
+                        }
+                });  
+            });
         }
         else{
             axios.post("http://"+hostname+":9000/albums", album)
             .then(res => {
-                console.log(res.data)
                 this.setState({
-                    id:res.data._id
+                    formClass: "was-validated",
+                    id:res.data._id,
+                    alert:{
+                        message:{
+                                head: "Success!",
+                                body: "The saving was successfull."
+                            },
+                        variant: "success"
+                        }
+                });
+                // Az add new-ra újratölteni!!
+                window.history.pushState("object or string", "Page Title", "/artists/edit/"+this.state.id);
+            })
+            .catch(error => {
+                this.setState({
+                    formClass: "was-validated",
+                    alert:{
+                        message:{
+                                head: error.response.data,
+                                body: "Please change that and try again!"
+                            },
+                        variant: "danger"
+                        }
                 })
-                this.props.history.push('/albums/edit/'+this.state.id)
             })
     
         }
     }
 
     render(){
-        console.log(this.state)
-        console.log(this.state.artists)
+
       return (
             <div>
+                {
+                    this.state.alert ?
+                        <AlertMessage message={this.state.alert.message}
+                                                 variant={this.state.alert.variant}/>
+                    : null
+                }
                 <h2>Edit album</h2>
                 <form onSubmit={this.onSubmit} className={this.state.formClass}>
 

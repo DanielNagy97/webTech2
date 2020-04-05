@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 const ArtistSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     country: {
         type: String,
