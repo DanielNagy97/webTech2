@@ -46,7 +46,6 @@ export default class UsrProfile extends Component {
     }
 
     render(){
-        console.log(this.state.profile_id)
         if (this.state.user === undefined && this.state.profile_id ===""){
             return null
         }

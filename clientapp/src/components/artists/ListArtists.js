@@ -85,7 +85,6 @@ export default class ListArtists extends Component {
           minWidth:170
         }
       ]
-      console.log(this.state.artists)
       return (
         <div className="cointainer">
           <ReactTable

@@ -63,7 +63,7 @@ export default class EditProfile extends Component {
             email: this.state.email,
             password: this.state.password
         }
-        console.log(user)
+
         axios.patch("http://"+hostname+":9000/users/"+this.state.usr_id, user, {
             headers: { Authorization: "Bearer " + this.state.token }
             })

@@ -43,7 +43,6 @@ export default class LoginForm extends Component {
         }
         axios.post("http://"+hostname+":9000/auth", user)
             .then(res => {
-                console.log(res.data);
                 cookie.set('usr_id', res.data.userID);
                 cookie.set('token', res.data.token);
                 this.setState({
@@ -52,7 +51,6 @@ export default class LoginForm extends Component {
                 window.location.reload();
             })
             .catch(error => {
-                console.log(error.response)
                 this.setState({
                     error: error.response.data
                 })

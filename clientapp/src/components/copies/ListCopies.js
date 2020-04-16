@@ -48,7 +48,6 @@ export default class ListCopies extends Component {
     }
 
     render(){
-        console.log(this.state)
       const columns = [
         {
           Header: "Album",

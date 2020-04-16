@@ -47,7 +47,6 @@ export default class EditCopy extends Component {
         axios.get("http://"+hostname+":9000/albums/")
             .then(res => {
                 if (res.data.length > 0){
-                    console.log(res.data)
                     albums = res.data
                     this.setState({
                         album:albums[0]._id,
@@ -62,7 +61,6 @@ export default class EditCopy extends Component {
         if (this.state.id !== undefined){
             axios.get("http://"+hostname+":9000/copies/"+this.state.id)
             .then(res => {
-                console.log(res.data)
                 this.setState({
                     album:res.data.album._id,
                     madeIn:res.data.madeIn,
@@ -123,7 +121,7 @@ export default class EditCopy extends Component {
             rating: this.state.rating,
             owner: cookie.get("usr_id")
         }
-        console.log(copy)
+
         if (this.state.id !== undefined){
             axios.patch("http://"+hostname+":9000/copies/"+this.state.id, copy)
             .then(res => {
@@ -142,7 +140,7 @@ export default class EditCopy extends Component {
         else{
             axios.post("http://"+hostname+":9000/copies", copy)
             .then(res => {
-                console.log(res.data)
+
                 this.setState({
                     formClass: "was-validated",
                     id:res.data._id,
@@ -160,7 +158,7 @@ export default class EditCopy extends Component {
     }
 
     render(){
-        console.log(this.state)
+
       return (
             <div>
                 {

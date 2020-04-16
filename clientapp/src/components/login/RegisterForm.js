@@ -48,13 +48,11 @@ export default class RegisterForm extends Component {
             email: this.state.email,
             password: this.state.password
         }
-        console.log(user)
         axios.post("http://"+hostname+":9000/users", user)
             .then(res => {
-                console.log(res.data);
+
             })
             .catch(error => {
-                console.log(error.response.data)
                 this.setState({
                     alert: error.response.data
                 })
