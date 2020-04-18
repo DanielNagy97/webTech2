@@ -19,6 +19,7 @@ export default class RegisterForm extends Component {
             name: '',
             email: '',
             password: '',
+            isSuccess:false,
             alert:""
         }
     }
@@ -50,7 +51,9 @@ export default class RegisterForm extends Component {
         }
         axios.post("http://"+hostname+":9000/users", user)
             .then(res => {
-
+                this.setState({
+                    isSuccess : true
+                })
             })
             .catch(error => {
                 this.setState({
