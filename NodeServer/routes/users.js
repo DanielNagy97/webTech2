@@ -9,7 +9,8 @@ const config = require('config');
 const expressjwt = require("express-jwt");
 
 const jwtCheck = expressjwt({    
-    secret: config.get('PrivateKey')
+    secret: config.get('PrivateKey'),
+    algorithms: ['HS256']
 });
 
 router.get('/', async (req, res) => {
