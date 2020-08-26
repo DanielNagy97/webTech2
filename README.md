@@ -13,6 +13,7 @@ MERN full stack CRUD application
 
     2. Start Node.JSbackend with the following commands in ./NodeServer (you must add a PrivateKey, which is stored as an environment variable):
     > ```export default PrivateKey=key-goes-here```
+    >
     > ```npm start```
 
     3. Start React.JS frontend with the following command in ./clientapp:
